@@ -4,6 +4,7 @@ import numpy as np
 
 from torch.utils.data import DataLoader 
 from src.models.lstm import LSTM_model
+from src.models.gru import GRU_model
 from src.utils.dataset import SampleDataset
 from src.utils.data_transfer import data_transfer
 
@@ -32,13 +33,22 @@ train_loader = DataLoader(
                          )
 
 # Step 4. Init model
-model = LSTM_model(
-    num_classes = int(config[config_use]['num_classes']),
-    input_size = int(config[config_use]['input_size']),
-    hidden_size = int(config[config_use]['hidden_size']),
-    num_layers = int(config[config_use]['num_layers']),
-    seq_length = int(config[config_use]['seq_length'])
-)
+if config[config_use]['module'] == 'gru':
+    model = GRU_model(
+        num_classes = int(config[config_use]['num_classes']),
+        input_size = int(config[config_use]['input_size']),
+        hidden_size = int(config[config_use]['hidden_size']),
+        num_layers = int(config[config_use]['num_layers']),
+        seq_length = int(config[config_use]['seq_length'])
+    )
+else:
+    model = LSTM_model(
+        num_classes = int(config[config_use]['num_classes']),
+        input_size = int(config[config_use]['input_size']),
+        hidden_size = int(config[config_use]['hidden_size']),
+        num_layers = int(config[config_use]['num_layers']),
+        seq_length = int(config[config_use]['seq_length'])
+    )
 
 # Step 5. Init utils
 loss_list = []
@@ -48,12 +58,14 @@ optimizer = torch.optim.Adam(model.parameters(), lr = float(config[config_use]['
 # Step 6. Train
 for epoch in range(int(config[config_use]['epoches'])):
     for index, data in enumerate(train_loader):
-        input = data[:, np.newaxis, :-1]
+        input = data[:, np.newaxis, :-1].float()
+        target = data[:, -1:].float()
         output = model(input)
 
+        loss = loss_fuction(output, target)
         optimizer.zero_grad()
-        loss = loss_fuction(output, data[:, -1])
         loss.backward()
+        optimizer.step()
         loss_list.append(loss)
     if epoch % 100 == 0:
         print('Epoch: {}, Loss: {:1.4f}'.format(epoch, loss_list[-1]))
