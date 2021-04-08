@@ -4,9 +4,16 @@ A model about stock price prediction by using machine learning.
 
 ## :bulb: Introduction
 
-One hundred percent precise stock prediction is ... everyone's dream, we can use machine learning to do ... anyway, let's directly introduce to our model. 
+One hundred percent precise stock prediction is ... everyone's dream, we can use machine learning to do so ... anyway, let's directly introduce to our model. 
 
-This project is based on LSTM structure to predict the one-line time series stock trend. 
+This project is based on LSTM structure and GRU structure to predict the one-line time series stock trend. 
+
+Features: 
+
+- **Easy to use**: just by runninng `python3 train.py` and `python3 test.py` you can run the model and get the result. 
+- **Easy to controling**: all peremeters are in single file `config.ini`, just modify this one to controll the whold model. 
+- **Easy to modify**: all source code is well object-oriented organized, reuse models, utils would be easy. 
+- **Works for different dataset**: any dataset follows the structure of example in csv can be used, just put your dataset in data folder and run. 
 
 ## :wrench: Envirenment 
 
@@ -47,3 +54,22 @@ Step 4. After testing the example, you can modify the `congif.ini` to test diffe
 
 ## :bar_chart: Examples
 
+Samsung stock prediction. 
+
+<img src="./fig/samsung_gru.png" width="80%">
+
+---
+
+Apple stock prediction. 
+
+<img src="./fig/apple_gru.png" width="80%">
+
+---
+
+IBM stock prediction. 
+
+<img src="./fig/ibm_gru.png" width="80%">
+
+## 📬 Feedback
+
+Feel free to rise issue or pull request if you find something interesting or something wrong. 
