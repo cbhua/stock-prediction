@@ -58,13 +58,13 @@ Samsung stock prediction.
 
 <img src="./fig/samsung_gru.png" width="80%">
 
----
+
 
 Apple stock prediction. 
 
 <img src="./fig/apple_gru.png" width="80%">
 
----
+
 
 IBM stock prediction. 
 
