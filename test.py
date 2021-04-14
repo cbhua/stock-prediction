@@ -1,22 +1,38 @@
 import torch
 import configparser
 import numpy as np
+import datetime
 import matplotlib.pyplot as plt
 
 from torch.utils.data import DataLoader 
 from src.models.lstm import LSTM_model
 from src.models.gru import GRU_model
-from src.utils.dataset import SampleDataset
+from src.utils.dataset import LocalDataset, OnlineDataset
 
 
 config = configparser.ConfigParser()
 config.read('config.ini')
 config_use = config['switcher']['config_use']
 
-test_set = SampleDataset(config[config_use]['save_dataset_path'] + 
-                          config[config_use]['src_dataset_path'].split('/')[-1][:-4] + 
-                          '_test.npy'
-                        )
+if config[config_use]['use_local_data'] == 'True': 
+    test_set = LocalDataset(config[config_use]['save_dataset_path'] + 
+                            config[config_use]['src_dataset_path'].split('/')[-1][:-4] + 
+                            '_train.npy'
+                            )
+else:
+    test_set = OnlineDataset(config[config_use]['company'], 
+                              config[config_use]['data_source'], 
+                              datetime.datetime(*(int(config[config_use]['test_strat_date'][:4]), int(config[config_use]['test_strat_date'][4:6]), int(config[config_use]['test_strat_date'][6:]))),
+                              datetime.datetime(*(int(config[config_use]['test_end_date'][:4]), int(config[config_use]['test_end_date'][4:6]), int(config[config_use]['test_end_date'][6:])))
+                             )
+
+# Step 3. Create dataloader
+test_loader = DataLoader(
+                          dataset = test_set, 
+                          batch_size = test_set.__len__(), 
+                          shuffle = False
+                         )
+
 test_loader = DataLoader(
                           dataset = test_set, 
                           batch_size = int(config[config_use]['test_batch_size']), 
