@@ -15,6 +15,8 @@ Features:
 - **Easy to modify**: all source code is well object-oriented organized, reuse models, utils would be easy. 
 - **Works for different dataset**: any dataset follows the structure of example in csv can be used, just put your dataset in data folder and run. 
 
+**v1.1 Update** Sentiment analysis method now is available! We can add sentiment data from Tweeter as a new feature for prediction. For more detail about using, please refer to How to use part. 
+
 ## :wrench: Envirenment 
 
 ``` Python
@@ -50,25 +52,51 @@ Step 2. Run `train.py` to transfer the example original dataset to numpy files a
 
 Step 3. Run `test.py` to test the example, the running result will be saved as figs in `fig` folder. 
 
-Step 4. After testing the example, you can modify the `congif.ini` to test different parameters and generate your results. And modify modules to get what you want. 
+Step 4. After testing the example, you can modify the `congif.ini` to test different parameters and generate your results. And modify modules to get what you want. Here are some tips:
+
+- If you choose to use local data rather than online data, i.e. set `use_local_data` to `True`, you may need to fill up the `src_dataset_path` and `save_dataset_path` for preprocessing data. 
+
+- If you want to try different model except `lstm`, you can set module to `gru`, which is another algoritm provided. For GRU model, we recommend to set the batch size to 1 to get better performance-computation balance. 
+
+### Sentiment Analysis
+
+If you want to apply the sentiment analysis, you can follow these extra steps between step 1 and step 2 above. 
+
+Step 1.1. Download Tweeter dataset as CSV and save to `data/ori` folder. Here we provide an example dataset `data/ori/example1_sentiment_ori.csv`. 
+
+Step 1.2. Fix config.ini, make sure the use_sentiment_analysis value is True, also fill up the path for data processing. During the process for the original tweeter data there would be several chache file saved, as checkpoints. 
+
+Also, since we will add one extra feature, please remember to modify the input size for module (6 -> 7). As mentioned above, if you use GRU, we recommened you to set the batch size to 1 to get better performance-computation balance. 
+
+Performance comparation please refer to Examples result. 
 
 ## :bar_chart: Examples
 
 Samsung stock prediction. 
 
 <img src="./fig/samsung_gru.png" width="80%">
-
+</br>
 
 
 Apple stock prediction. 
 
 <img src="./fig/apple_gru.png" width="80%">
-
+</br>
 
 
 IBM stock prediction. 
 
 <img src="./fig/ibm_gru.png" width="80%">
+</br>
+
+Nvidia Tweets data transferred word cloud. 
+
+<img src="./fig/nvidia_word_cloud.png" width="80%">
+</br>
+
+Performance compare for using sentiment in Nvidia dataset. 
+
+<img src="./fig/nvidia_sentiment_compare.png" width="80%">
 
 ## 📬 Feedback
 
