@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader 
 from src.models.lstm import LSTM_model
 from src.models.gru import GRU_model
-from src.utils.dataset import LocalDataset, OnlineDataset
+from src.utils.dataset import LocalDataset, OnlineDataset, OnlineSentimentDataset
 
 
 config = configparser.ConfigParser()
@@ -19,6 +19,13 @@ if config[config_use]['use_local_data'] == 'True':
                             config[config_use]['src_dataset_path'].split('/')[-1][:-4] + 
                             '_train.npy'
                             )
+elif config[config_use]['use_sentiment_analysis'] == 'False':
+    train_set = OnlineSentimentDataset(config[config_use]['company'], 
+                                       config[config_use]['data_source'], 
+                                       datetime.datetime(*(int(config[config_use]['train_strat_date'][:4]), int(config[config_use]['train_strat_date'][4:6]), int(config[config_use]['train_strat_date'][6:]))),
+                                       datetime.datetime(*(int(config[config_use]['train_end_date'][:4]), int(config[config_use]['train_end_date'][4:6]), int(config[config_use]['train_end_date'][6:]))),
+                                       config[config_use]['sentiment_dataset_save_path']
+                                       )
 else:
     test_set = OnlineDataset(config[config_use]['company'], 
                               config[config_use]['data_source'], 
@@ -27,12 +34,6 @@ else:
                              )
 
 # Step 3. Create dataloader
-test_loader = DataLoader(
-                          dataset = test_set, 
-                          batch_size = test_set.__len__(), 
-                          shuffle = False
-                         )
-
 test_loader = DataLoader(
                           dataset = test_set, 
                           batch_size = int(config[config_use]['test_batch_size']), 
